@@ -13,36 +13,34 @@ c1 = []
 c2 = []
 
 
-def ini_filter_1(path):
-    for root, dirs, files in os.walk(path):
-        for file in files:
-            if file.endswith(".ini"):
-                l1.append(os.path.join(root, file))
-                window["-L1-"].update(l1)
+def ini_filter(path, mode):
+    if mode == 0:
+        for root, dirs, files in os.walk(path):
+            for file in files:
+                if file.endswith(".ini"):
+                    l1.append(os.path.join(root, file))
+                    window["-L1-"].update(l1)
+    if mode == 1:
+        for root, dirs, files in os.walk(path):
+            for file in files:
+                if file.endswith(".ini"):
+                    l2.append(os.path.join(root, file))
+                    window["-L2-"].update(l2)
 
 
-def ini_filter_2(path):
-    for root, dirs, files in os.walk(path):
-        for file in files:
-            if file.endswith(".ini"):
-                l2.append(os.path.join(root, file))
-                window["-L2-"].update(l2)
-
-
-def r_1(file_1):
-    c1 = []
-    with open(file_1) as file:
-        for line in file:
-            c1.append(line.rstrip())
-            window["-C1-"].update(c1)
-
-
-def r_2(file_2):
-    c2 = []
-    with open(file_2) as file:
-        for line in file:
-            c2.append(line.rstrip())
-            window["-C2-"].update(c2)
+def read(file, mode):
+    if mode == 0:
+        c1 = []
+        with open(file) as file:
+            for line in file:
+                c1.append(line.rstrip())
+                window["-C1-"].update(c1)
+    if mode == 1:
+        c2 = []
+        with open(file) as file:
+            for line in file:
+                c2.append(line.rstrip())
+                window["-C2-"].update(c2)
 
 
 col1 = [[sg.Text('Folder 1'),
@@ -66,16 +64,18 @@ col5 = [[sg.Listbox(c1, size=(80, 30), enable_events=True, key="-C1-"), ],
          sg.Button('Section', enable_events=True, key="-T_SECTION_1-"),
          sg.Button('Key', enable_events=True, key="-T_KEY_1-"),
          sg.Button('Value', enable_events=True, key="-T_VALUE_1-"), ],
-        [sg.Text('Edit : '), ],
-        [sg.InputText('', enable_events=True, key="-EDIT_1-", ), ], ]
+        [sg.Button('Edit selected string', enable_events=True, key="-EDIT_1-"), ],
+        [sg.InputText('', enable_events=True, key="-EDIT_INPUT_1-", ),
+         sg.Button('Accept', enable_events=True, key="-ACCEPT_EDIT_1-"), ], ]
 
 col6 = [[sg.Listbox(c2, size=(80, 30), enable_events=True, key="-C2-"), ],
         [sg.Text('Transfer : '),
          sg.Button('Section', enable_events=True, key="-T_SECTION_2-"),
          sg.Button('Key', enable_events=True, key="-T_KEY_2-"),
          sg.Button('Value', enable_events=True, key="-T_VALUE_2-"), ],
-        [sg.Text('Edit : '), ],
-        [sg.InputText('', enable_events=True, key="-EDIT_2-", ), ], ]
+        [sg.Button('Edit selected string', enable_events=True, key="-EDIT_2-"), ],
+        [sg.InputText('', enable_events=True, key="-EDIT_INPUT_2-", ),
+         sg.Button('Accept', enable_events=True, key="-ACCEPT_EDIT_2-"), ], ]
 
 layout = [
     [[sg.Column(col1, element_justification='left'), sg.Column(col2, element_justification='left'), ]],
@@ -94,10 +94,10 @@ while True:  # The Event Loop
         break
     if event == '-SCAN_1-':
         inputPath1 = values['-FOLDER_1-']
-        ini_filter_1(inputPath1)
+        ini_filter(inputPath1, 0)
     if event == '-SCAN_2-':
         inputPath2 = values['-FOLDER_2-']
-        ini_filter_2(inputPath2)
+        ini_filter(inputPath2, 1)
     if event == '-L1-' and len(values['-L1-']):
         path1 = values['-L1-']  # if a list item is chosen
     if event == '-L2-' and len(values['-L2-']):
@@ -107,5 +107,5 @@ while True:  # The Event Loop
     if event == '-ADD_2-':
         window['-FILE_2-'].Update(f_2)
     if event == '-COMPARE-':
-        r_1(f_1)
-        r_2(f_2)
+        read(f_1, 0)
+        read(f_2, 1)
