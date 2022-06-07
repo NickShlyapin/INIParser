@@ -1,5 +1,6 @@
 import PySimpleGUI as sg
 import configparser
+from difflib import Differ
 
 import re
 import os
@@ -28,19 +29,17 @@ def ini_filter(path, mode):
                     window["-L2-"].update(l2)
 
 
-def read(file, mode):
-    if mode == 0:
-        c1 = []
-        with open(file) as file:
-            for line in file:
-                c1.append(line.rstrip())
-                window["-C1-"].update(c1)
-    if mode == 1:
-        c2 = []
-        with open(file) as file:
-            for line in file:
-                c2.append(line.rstrip())
-                window["-C2-"].update(c2)
+def compare(file_1, file_2):
+    c1 = []
+    with open(file_1) as file:
+        for line in file:
+            c1.append(line.rstrip())
+            window["-C1-"].update(c1)
+    c2 = []
+    with open(file_2) as file:
+        for line in file:
+            c2.append(line.rstrip())
+            window["-C2-"].update(c2)
 
 
 col1 = [[sg.Text('Folder 1'),
@@ -107,5 +106,4 @@ while True:  # The Event Loop
     if event == '-ADD_2-':
         window['-FILE_2-'].Update(f_2)
     if event == '-COMPARE-':
-        read(f_1, 0)
-        read(f_2, 1)
+        compare(values['-L1-'], values['-L2-'])
