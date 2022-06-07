@@ -1,6 +1,7 @@
 import PySimpleGUI as sg
 import configparser
 
+from difflib import Differ
 import re
 import os
 
@@ -40,6 +41,12 @@ def read(file, mode):
                 c2.append(line.rstrip())
                 window["-C2-"].update(c2)
 
+def clear():
+    c1.clear()
+    window["-C1-"].update(c1)
+    c2.clear()
+    window["-C2-"].update(c2)
+
 
 col1 = [[sg.Text('Folder 1'),
          sg.InputText('D:/JetBrains', enable_events=True, key="-FOLDER_1-", size=(30, 10)), sg.FolderBrowse(),
@@ -55,7 +62,7 @@ col2 = [[sg.Text('Folder 2'),
         [sg.Button('Add to Compare', enable_events=True, key="-ADD_2-")],
         [sg.Text('Selected File 2'), sg.InputText('', enable_events=True, key="-FILE_2-", )], ]
 
-col3 = [[sg.Button('Compare', enable_events=True, key="-COMPARE-")], ]
+col3 = [[sg.Button('Compare', enable_events=True, key="-COMPARE-"), sg.Button('Clear lists', enable_events=True, key="-CLEAR-"),], ]
 
 col5 = [[sg.Listbox(c1, size=(80, 30), enable_events=True, key="-C1-"), ],
         [sg.Text('Transfer : '),
@@ -104,12 +111,11 @@ while True:  # The Event Loop
         window['-FILE_1-'].Update(f_1)
     if event == '-ADD_2-':
         window['-FILE_2-'].Update(f_2)
+    if event == '-CLEAR-':
+        clear()
     if event == '-COMPARE-':
         read(f_1, 0)
         read(f_2, 1)
-    if event == '-T_SECTION_1-':
-        config.read('f_1')
-        INDEX = int(''.join(map(str, window["-C1-"].get_indexes())))
-        c2.append(c1.pop(INDEX))
-        window['-C2-'].update(c2)
-        window['-C1-'].update(c1)
+        c1 = list(Differ().compare(c1, c2))
+        window["-C1-"].update(c1)
+
