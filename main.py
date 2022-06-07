@@ -102,8 +102,9 @@ while True:  # The Event Loop
         path1 = values['-L1-']  # if a list item is chosen
     if event == '-L2-' and len(values['-L2-']):
         path2 = values['-L2-']  # if a list item is chosen
-    if event == '-ADD-':
+    if event == '-ADD_1-':
         window['-FILE_1-'].Update(f_1)
+    if event == '-ADD_2-':
         window['-FILE_2-'].Update(f_2)
     if event == '-COMPARE-':
         r_1(f_1)
