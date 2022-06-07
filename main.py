@@ -30,13 +30,11 @@ def ini_filter(path, mode):
 
 def read(file, mode):
     if mode == 0:
-        c1 = []
         with open(file) as file:
             for line in file:
                 c1.append(line.rstrip())
                 window["-C1-"].update(c1)
     if mode == 1:
-        c2 = []
         with open(file) as file:
             for line in file:
                 c2.append(line.rstrip())
@@ -109,3 +107,9 @@ while True:  # The Event Loop
     if event == '-COMPARE-':
         read(f_1, 0)
         read(f_2, 1)
+    if event == '-T_SECTION_1-':
+        config.read('f_1')
+        INDEX = int(''.join(map(str, window["-C1-"].get_indexes())))
+        c2.append(c1.pop(INDEX))
+        window['-C2-'].update(c2)
+        window['-C1-'].update(c1)
