@@ -45,24 +45,45 @@ def r_2(file_2):
             window["-C2-"].update(c2)
 
 
+col1 = [[sg.Text('Folder 1'),
+         sg.InputText('D:/JetBrains', enable_events=True, key="-FOLDER_1-", size=(30, 10)), sg.FolderBrowse(),
+         sg.Button('Scan', enable_events=True, key="-SCAN_1-"), ],
+        [sg.Listbox(l1, size=(80, 10), enable_events=True, key="-L1-"), ],
+        [sg.Button('Add to Compare', enable_events=True, key="-ADD_1-")],
+        [sg.Text('Selected File 1'), sg.InputText('', enable_events=True, key="-FILE_1-", )], ]
+
+col2 = [[sg.Text('Folder 2'),
+         sg.InputText('D:/JetBrains', enable_events=True, key="-FOLDER_2-", size=(30, 10)), sg.FolderBrowse(),
+         sg.Button('Scan', enable_events=True, key="-SCAN_2-"), ],
+        [sg.Listbox(l2, size=(80, 10), enable_events=True, key="-L2-"), ],
+        [sg.Button('Add to Compare', enable_events=True, key="-ADD_2-")],
+        [sg.Text('Selected File 2'), sg.InputText('', enable_events=True, key="-FILE_2-", )], ]
+
+col3 = [[sg.Button('Compare', enable_events=True, key="-COMPARE-")], ]
+
+col5 = [[sg.Listbox(c1, size=(80, 30), enable_events=True, key="-C1-"), ],
+        [sg.Text('Transfer : '),
+         sg.Button('Section', enable_events=True, key="-T_SECTION_1-"),
+         sg.Button('Key', enable_events=True, key="-T_KEY_1-"),
+         sg.Button('Value', enable_events=True, key="-T_VALUE_1-"), ],
+        [sg.Text('Edit : '), ],
+        [sg.InputText('', enable_events=True, key="-EDIT_1-", ), ], ]
+
+col6 = [[sg.Listbox(c2, size=(80, 30), enable_events=True, key="-C2-"), ],
+        [sg.Text('Transfer : '),
+         sg.Button('Section', enable_events=True, key="-T_SECTION_2-"),
+         sg.Button('Key', enable_events=True, key="-T_KEY_2-"),
+         sg.Button('Value', enable_events=True, key="-T_VALUE_2-"), ],
+        [sg.Text('Edit : '), ],
+        [sg.InputText('', enable_events=True, key="-EDIT_2-", ), ], ]
+
 layout = [
-    [sg.Text('Folder 1'),
-     sg.InputText('D:/JetBrains', enable_events=True, key="-FOLDER_1-", size=(30, 10)), sg.FolderBrowse(),
-     sg.Button('Scan', enable_events=True, key="-SCAN_1-"),
-     sg.Text('Folder 2'),
-     sg.InputText('D:/JetBrains', enable_events=True, key="-FOLDER_2-", size=(30, 10)), sg.FolderBrowse(),
-     sg.Button('Scan', enable_events=True, key="-SCAN_2-", )],
-    [[sg.Listbox(l1, size=(90, 10), enable_events=True, key="-L1-"),
-      sg.Listbox(l2, size=(90, 10), enable_events=True, key="-L2-")]],
-    [sg.Button('Add to Compare', enable_events=True, key="-ADD-")],
-    [sg.Text('Selected File 1'), sg.InputText('', enable_events=True, key="-FILE_1-", )],
-    [sg.Text('Selected File 2'), sg.InputText('', enable_events=True, key="-FILE_2-", )],
-    [sg.Button('Compare', enable_events=True, key="-COMPARE-")],
-    [sg.Listbox(c1, size=(90, 30), enable_events=True, key="-C1-", ),
-     sg.Listbox(c1, size=(90, 30), enable_events=True, key="-C2-", )],
+    [[sg.Column(col1, element_justification='left'), sg.Column(col2, element_justification='left'), ]],
+    [[sg.Column(col3, element_justification='left'), ]],
+    [[sg.Column(col5, element_justification='left'), sg.Column(col6, element_justification='left'), ]],
 ]
 
-window = sg.Window('INIParser', layout, size=(1300, 900), element_justification='center')
+window = sg.Window('INIParser', layout, size=(1200, 1200), resizable=True, )
 
 while True:  # The Event Loop
     event, values = window.read()
